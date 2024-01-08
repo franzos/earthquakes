@@ -208,7 +208,7 @@ Here's what this looks like:
 
 ![Earthquakes by Week](earthquakes-by-week_ipma.png)
 
-Cool; so over the past 4 weeks, most earthquakes occured in week 3, which I believe includes New Year. I doubt that's because of fireworks though; More likely is that we need significantly more data.
+Cool; so over the past 4 weeks, most earthquakes occurred in week 3, which I believe includes New Year. I doubt that's because of fireworks though; More likely is that we need significantly more data.
 
 ### Expand
 
@@ -277,7 +277,7 @@ python3 graph_usgs.py
 
 The script is not very efficient yet; I'll get back to this later. For now I want to add another dimension: Intensity.
 
-My first attempt came out funny. With thousands of quakes, and magnitutes in the lower tens, the scale was useless:
+My first attempt came out funny. With thousands of quakes, and magnitudes in the lower tens, the scale was useless:
 
 ![Earthquakes by Week](earthquakes-by-week_usgs_new_dimension.png)
 
@@ -290,4 +290,38 @@ Quick change, to use percentages, gives a more clear picture:
 
 It looks as though the number of quakes has been decreasing steadily. The intensity remains relatively steady, with what looks like regular fluctuations. It would be interesting to see 8 or more years. 
 
-In our example I can count maybe 7 tops, after each of which, the intensity decreases for ~ 6 months..
+What's missing are labels; Unfortunately plotext refuses to cooperate:
+
+```
+TypeError: multiple_bar() got an unexpected keyword argument 'labels'
+```
+
+Upon further inspection I found that the latest release (`5.2.8`) is already a year old and differs from the master branch - which supports `labels`: [here](https://github.com/piccolomo/plotext/blob/0ec31af0f3f23e4d7abde15479edc4edf3f0875c/plotext/_core.py#L199):
+
+```python
+def multiple_bar(*args, marker = None, color = None, fill = None, width = None, orientation = None, minimum = None, reset_ticks = None, xside = None, yside = None, labels = None):
+    _figure._active.multiple_bar(*args, xside = xside, yside = yside, marker = marker, color = color, fill = fill, width = width, orientation = orientation, labels = labels, minimum = minimum, reset_ticks = reset_ticks)
+    _figure.show() if _figure._interactive else None
+```
+
+and here's what I'm running:
+
+```python
+$ cat /gnu/store/q45ra0sw499g5i2zmyd7nk1rbs108p3i-profile/lib/python3.10/site-packages/plotext/_core.py | grep "def multiple_bar"
+def multiple_bar(*args, xside = None, yside = None, marker = None, color = None, fill = None, width = None, orientation = None, label = None, minimum = None, reset_ticks = None):
+```
+
+Okay, so `label` instead of `labels`. Fine.
+
+```python
+import plotext
+
+plotext.multiple_bar(
+    plot_labels,
+    [plot_data, plot_data_mag],
+    label=['Quakes', 'Max Mag.'])
+plotext.title("Number of earthquakes and intensity, by week, %s - %s"
+        % (date_start, date_end))
+
+plotext.show()
+```

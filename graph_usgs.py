@@ -108,7 +108,7 @@ def main():
           % (len(data_in_region), date_start, date_end, exclude_count))
 
     periods = []
-    interval_hours = 360
+    interval_hours = 720
 
     total_time = date_end - date_start
     total_time_hours = total_time.total_seconds() / 3600
@@ -156,7 +156,7 @@ def main():
     plotext.multiple_bar(
             plot_labels,
             [plot_data, plot_data_mag],
-            # labels=['Quakes', 'Max Mag.']
+            label=['Quakes', 'Max Mag.']
             )
     plotext.title("Number of earthquakes and intensity, by week, %s - %s"
                   % (date_start, date_end))
