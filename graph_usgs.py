@@ -117,12 +117,13 @@ def main():
     for i in range(0, int(intervals)):
         start = date_start + timedelta(hours=i * interval_hours)
         end = start + timedelta(hours=interval_hours)
-        periods.append({'#': i, 'start': start, 'end': end, 'mag': 0})
+        periods.append({'#': i, 'start': start, 'end': end, 'mag': 0, 'depth': 0})
 
     for period in periods:
         period['entries'] = []
 
     max_mag = 0
+    max_depth = 0
     for entry in data_in_region:
         time = datetime.strptime(entry['time'], DATE_FORMAT)
         for period in periods:
@@ -133,11 +134,19 @@ def main():
                     period['mag'] = entry_mag
                 if entry_mag > max_mag:
                     max_mag = entry_mag
+
+                entry_depth = float(entry['depth'])
+                if entry_depth > period['depth']:
+                    period['depth'] = entry_depth
+                if entry_depth > max_depth:
+                    max_depth = entry_depth
+
                 break
 
     plot_labels = []
     plot_data = []
     plot_data_mag = []
+    plot_data_depth = []
 
     max_quakes = 0
     for period in periods:
@@ -150,15 +159,16 @@ def main():
         plot_labels.append(period['#'])
         plot_data.append(count / max_quakes * 100)
         plot_data_mag.append(period['mag'] / max_mag * 100)
+        plot_data_depth.append(period['depth'] / max_depth * 100)
 
     import plotext
 
     plotext.multiple_bar(
             plot_labels,
-            [plot_data, plot_data_mag],
-            label=['Quakes', 'Max Mag.']
+            [plot_data, plot_data_mag, plot_data_depth],
+            label=['Quakes', 'Max Mag.', 'Max Depth'],
             )
-    plotext.title("Number of earthquakes and intensity, by week, %s - %s"
+    plotext.title("Number of earthquakes and intensity, by month, %s - %s"
                   % (date_start, date_end))
     plotext.show()
 

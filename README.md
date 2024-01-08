@@ -279,14 +279,14 @@ The script is not very efficient yet; I'll get back to this later. For now I wan
 
 My first attempt came out funny. With thousands of quakes, and magnitudes in the lower tens, the scale was useless:
 
-![Earthquakes by Week](earthquakes-by-week_usgs_new_dimension.png)
+![Earthquakes and their intensity, by Week](earthquakes-by-week_usgs_new_dimension.png)
 
 Quick change, to use percentages, gives a more clear picture:
 
 - Blue: Quakes
 - Green: Intensity
 
-![Earthquakes by Week](earthquakes-by-week_usgs_new_dimension_fixed.png)
+![Earthquakes and their intensity, by Week - fixed](earthquakes-by-week_usgs_new_dimension_fixed.png)
 
 It looks as though the number of quakes has been decreasing steadily. The intensity remains relatively steady, with what looks like regular fluctuations. It would be interesting to see 8 or more years. 
 
@@ -325,3 +325,20 @@ plotext.title("Number of earthquakes and intensity, by week, %s - %s"
 
 plotext.show()
 ```
+
+For the next trial, I also added another dimension: Depth.
+
+![Earthquakes, their intensity and depth, by Week](earthquakes-by-week_usgs_magnitude_depth.png).
+
+From the chart we can see, that the deepest recorded earthquake, in the past 4 years, occurred recently; It also seems as though the number of quakes has a weak relationship to the maximum depth recorded, but I would assume that's seeing something, that isn't there.
+
+The title is wrong though; It should be "by month", rather than "by week".
+
+At this point, I'm a bit more familiar with plotext, and had fun sourcing some data; In the next step, I want to do a couple of this:
+
+- For our US example, get loads more data (100+ years?)
+- Add parralel processing; On my Gen8 i7, it takes 13s to go trough 538,750 records (4y); With 100 or more years, this should quickly reach 325s++.
+
+Lastly, I will get back to Portugal; Collect lot's more data, and apply whatever I learned up to this point. It will also be interesting to compare our data from the US west coast, with Portugal later - it might give us a better idea of co-relation; basically, whatever happens on both sides of the planet repeatedly, might be caused by universal forces (like I would assume, that a full-moon increases the chance, and maybe magnitutde of earthquakes). Let's see ...
+
+To be continued in the following days ...
